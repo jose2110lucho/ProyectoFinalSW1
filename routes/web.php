@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CrearCuentoController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +23,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
+Route::get('crear_cuento',[CrearCuentoController::class,'crearCuento'])->name('crear_cuento');
+
 
 

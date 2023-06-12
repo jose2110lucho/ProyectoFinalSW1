@@ -311,25 +311,30 @@ return [
             'url'  => 'admin/blog',
             'can'  => 'manage-blog',
         ],
-        [
+        /* [
             'text'        => 'pages',
             'url'         => 'admin/pages',
             'icon'        => 'far fa-fw fa-file',
             'label'       => 4,
             'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
+        ], */
+        /* ['header' => 'account_settings'], */
         [
-            'text' => 'profile',
+            'text' => 'Mi perfil',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
+            'text' => 'Crear cuento',
+            'url'  => 'crear_cuento',
+            'icon' => 'fas fa-book-open',
         ],
         [
+            'text' => 'Mis cuentos',
+            'url'  => 'admin/settings',
+            'icon' => 'fas fa-book',
+        ],
+        /* [
             'text'    => 'multilevel',
             'icon'    => 'fas fa-fw fa-share',
             'submenu' => [
@@ -382,7 +387,7 @@ return [
             'text'       => 'information',
             'icon_color' => 'cyan',
             'url'        => '#',
-        ],
+        ], */
     ],
 
     /*
