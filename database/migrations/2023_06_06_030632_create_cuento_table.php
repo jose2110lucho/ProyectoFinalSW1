@@ -18,8 +18,6 @@ return new class extends Migration
             $table->foreign('genero_id')->references('id')->on('genero');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('tipo_id');
-            $table->foreign('tipo_id')->references('id')->on('tipo');
             $table->timestamps();
         });
     }

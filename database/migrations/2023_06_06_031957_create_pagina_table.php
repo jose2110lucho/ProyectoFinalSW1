@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pagina', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id');
             $table->string('text');
             $table->Integer('numeracion');
             $table->unsignedBigInteger('cuento_id');
             $table->foreign('cuento_id')->references('id')->on('cuento')->onDelete('cascade');
+            $table->primary(['id', 'cuento_id']);
             $table->timestamps();
         });
     }
