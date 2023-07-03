@@ -321,7 +321,7 @@ return [
         /* ['header' => 'account_settings'], */
         [
             'text' => 'Mi perfil',
-            'url'  => 'admin/settings',
+            'url'  => 'profile',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
@@ -333,6 +333,16 @@ return [
             'text' => 'Mis cuentos',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-book',
+        ],
+        [
+            'text' => 'Lista de Personajes',
+            'url'  => 'lista_personajes',
+            'icon' => '',
+        ],
+        [
+            'text' => 'Lista de Escenarios',
+            'url'  => 'lista_escenarios',
+            'icon' => '',
         ],
         /* [
             'text'    => 'multilevel',

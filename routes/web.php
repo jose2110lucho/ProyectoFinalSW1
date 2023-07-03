@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CrearCuentoController;
+use App\Http\Controllers\ListaEscenariosController;
+use App\Http\Controllers\ListaPersonajesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
@@ -33,6 +35,21 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('paginas', PaginaController::class)->middleware('auth');
 Route::get('crear_cuento',[CrearCuentoController::class,'crearCuento'])->name('crear_cuento');
 
+/*  lista de personajes */
+Route::get('lista_personajes',[ListaPersonajesController::class,'listaPersonajes'])->name('lista_personajes');
+
+Route::delete('eliminar_personaje{id}',[ListaPersonajesController::class,'delete'])->name('eliminar_personaje');
+
+Route::delete('editar_personaje{id}',[ListaPersonajesController::class,'update'])->name('editar_personaje');
+
+
+
+/*  lista de escenarios */
+Route::get('lista_escenarios',[ListaEscenariosController::class,'listaEscenarios'])->name('lista_personajes');
+
+Route::delete('eliminar_escenario{id}',[ListaEscenariosController::class,'delete'])->name('eliminar_escenario');
+
+Route::delete('editar_personaje{id}',[ListaEscenariosController::class,'update'])->name('editar_escenario');
 
 
 
