@@ -47,7 +47,7 @@ class CuentoController extends Controller
         $cuento = Cuento::create($request->all());*/
         
          request()->validate([
-            'fecha' => 'required',
+            'created_at' => 'required',
             'titulo' => 'required',
         ]);
         $cuento  = new Cuento();

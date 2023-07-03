@@ -16,8 +16,10 @@
                         <span class="card-title">{{ __('Create') }} Pagina</span>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('paginas.store') }}"  role="form" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('paginas.store', ['id' => $id]) }}" role="form" enctype="multipart/form-data">
                             @csrf
+
+                            <input type="hidden" name="cuento_id" value="{{ $id }}"> <!-- Agregar un campo oculto para enviar el $id -->
 
                             @include('pagina.form')
 
@@ -28,3 +30,4 @@
         </div>
     </section>
 @endsection
+

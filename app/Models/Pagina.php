@@ -25,7 +25,7 @@ class Pagina extends Model
     static $rules = [
 		'text' => 'required',
 		'numeracion' => 'required',
-		'cuento_id' => 'required',
+	
     ];
 
     protected $perPage = 20;

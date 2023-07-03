@@ -13,7 +13,7 @@ Pagina
                 <div class="card-header">
                     <div class="card text-center">
                         <P></P>
-                        <h6 class="card-title">TITULO</h6>
+                        <h6 class="card-title">{{ $cuento->titulo }}</h6>
                         <P></P>
                     </div>
            
@@ -24,7 +24,7 @@ Pagina
 
                         <div class="float-left">
                             
-                            <a href="{{ route('paginas.create') }}" class="btn btn-primary btn-sm float-right shadow sm"
+                            <a href="{{ route('paginas.create', ['id' => $id]) }}" class="btn  btn-sm float-right shadow sm" style="background-color: #12CB55; width:300px"
                                 data-placement="left">
                                 {{ __('Crear Pagina') }}
                             </a>

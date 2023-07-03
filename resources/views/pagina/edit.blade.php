@@ -16,7 +16,8 @@
                         <span class="card-title">{{ __('Update') }} Pagina</span>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('paginas.update', $pagina->id) }}"  role="form" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('paginas.update', ['id' => $pagina->id, 'cuento_id' => $pagina->cuento_id]) }}" role="form" enctype="multipart/form-data">
+
                             {{ method_field('PATCH') }}
                             @csrf
 

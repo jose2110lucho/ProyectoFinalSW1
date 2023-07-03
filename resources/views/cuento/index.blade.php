@@ -54,8 +54,13 @@
                                 <tr>
                                     <td>{{ ++$i }}</td>
 
-                                    <td>{{ $cuento->fecha }}</td>
-                                    <td>{{ $cuento->titulo }}</td>
+                                    <td>{{ $cuento->created_at }}</td>
+                                    <td>
+                                        @csrf
+                                        <a class="table" type="submit"
+                                            href="{{ route('paginas.index', ['id' => $cuento->id]) }}">Cuento
+                                            {{ $cuento->titulo }}</a>
+                                    </td>
 
                                     <td class="td-actions text-right">
                                         {{--Ver PDF--}}

@@ -5,9 +5,9 @@
         </div>
         {{--Fecha--}}
         <div class="row">
-            <label for="fecha" class="col-sm-2 col-form-label"> Fecha </label>
+            <label for="created_at" class="col-sm-2 col-form-label"> Fecha </label>
             <div class="col-sm-7">
-                <input type="date" class="form-control" name="fecha" value="{{ old('fecha',$cuento->fecha) }}">
+                <input type="date" class="form-control" name="created_at" value="{{ old('created_at',$cuento->created_at) }}">
                 @if ($errors->has('fecha'))
                 <span class="error text-danger" for="input-fecha">
                     {{ $errors->first('fecha') }}

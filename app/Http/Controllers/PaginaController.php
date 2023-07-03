@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pagina;
+use App\Models\Cuento;
 use Illuminate\Http\Request;
 
 /**
@@ -16,23 +17,26 @@ class PaginaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        $paginas = Pagina::paginate();
-
-        return view('pagina.index', compact('paginas'))
+        $cuento = Cuento::find($id);
+        $paginas = Pagina::where('cuento_id', $id)->paginate();
+    
+        return view('pagina.index', compact('paginas', 'id','cuento'))
             ->with('i', (request()->input('page', 1) - 1) * $paginas->perPage());
     }
+    
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+        public function create($id)
     {
+
         $pagina = new Pagina();
-        return view('pagina.create', compact('pagina'));
+        return view('pagina.create', compact('pagina', 'id'));
     }
 
     /**
@@ -41,15 +45,23 @@ class PaginaController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        request()->validate(Pagina::$rules);
+    public function store(Request $request, $id)
+{
+    request()->validate(Pagina::$rules);
 
-        $pagina = Pagina::create($request->all());
+    $pagina = new Pagina();
+    $pagina->cuento_id = $id;
+    $pagina->fill($request->except('cuento_id'));
+    $pagina->save();
 
-        return redirect()->route('paginas.index')
-            ->with('success', 'Pagina created successfully.');
-    }
+    return redirect()->route('paginas.index', ['id' => $id])
+        ->with('success', 'Pagina created successfully.');
+}
+
+
+
+
+
 
     /**
      * Display the specified resource.
@@ -74,7 +86,7 @@ class PaginaController extends Controller
     {
         $pagina = Pagina::find($id);
 
-        return view('pagina.edit', compact('pagina'));
+        return view('pagina.edit', compact('pagina','id'));
     }
 
     /**
@@ -84,15 +96,26 @@ class PaginaController extends Controller
      * @param  Pagina $pagina
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pagina $pagina)
+    public function update(Request $request, $id, $cuento_id)
     {
         request()->validate(Pagina::$rules);
-
+    
+        $pagina = Pagina::find($id);
+    
+        if (!$pagina) {
+            return redirect()->route('paginas.index')
+                ->with('error', 'Pagina not found');
+        }
+    
         $pagina->update($request->all());
-
-        return redirect()->route('paginas.index')
+    
+        return redirect()->route('paginas.index', ['id' => $cuento_id])
             ->with('success', 'Pagina updated successfully');
     }
+
+    
+
+    
 
     /**
      * @param int $id
@@ -101,9 +124,13 @@ class PaginaController extends Controller
      */
     public function destroy($id)
     {
-        $pagina = Pagina::find($id)->delete();
-
-        return redirect()->route('paginas.index')
-            ->with('success', 'Pagina deleted successfully');
+        $pagina = Pagina::find($id);
+        $cuento_id = $pagina->cuento_id; // Guarda el valor antes de eliminar
+    
+        $pagina->delete();
+    
+        return redirect()->route('paginas.index', ['id' => $cuento_id])
+            ->with('success', 'Pagina deleted successfully.');
     }
+    
 }

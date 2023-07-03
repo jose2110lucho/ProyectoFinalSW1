@@ -28,7 +28,7 @@ class Cuento extends Model
 {
     
     static $rules = [
-		'fecha' => 'required',
+		'created_at' => 'required',
 		'titulo' => 'required',
 		'genero_id' => 'required',
 		'user_id' => 'required',
@@ -42,7 +42,7 @@ class Cuento extends Model
      *
      * @var array
      */
-    protected $fillable = ['fecha','titulo','genero_id','user_id','tipo_id'];
+    protected $fillable = ['created_at','titulo','genero_id','user_id','tipo_id'];
 
 
     /**
