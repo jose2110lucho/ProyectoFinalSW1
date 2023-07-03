@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('cuento', function (Blueprint $table) {
             $table->id();
+            $table->date('fecha');
             $table->string('titulo');
             $table->unsignedBigInteger('genero_id');
             $table->foreign('genero_id')->references('id')->on('genero');

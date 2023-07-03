@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'Software 1',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -325,15 +325,14 @@ return [
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'Crear cuento',
-            'url'  => 'crear_cuento',
-            'icon' => 'fas fa-book-open',
+            'text' => 'change_password',
+            'url'  => 'admin/settings',
+            'icon' => 'fas fa-fw fa-lock',
         ],
         [
-            'text' => 'Mis cuentos',
-            'url'  => 'admin/settings',
+            'text' => 'Cuentos',
+            'url'  => 'cuentos',
             'icon' => 'fas fa-book',
-        ],
         /* [
             'text'    => 'multilevel',
             'icon'    => 'fas fa-fw fa-share',
@@ -372,6 +371,7 @@ return [
                 ],
             ],
         ],
+        
         ['header' => 'labels'],
         [
             'text'       => 'important',
