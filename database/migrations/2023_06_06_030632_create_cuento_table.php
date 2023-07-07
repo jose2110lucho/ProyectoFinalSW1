@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('cuento', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
+            $table->date('fecha');
             $table->unsignedBigInteger('genero_id');
             $table->foreign('genero_id')->references('id')->on('genero');
             $table->unsignedBigInteger('user_id');

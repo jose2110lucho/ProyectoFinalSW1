@@ -321,19 +321,19 @@ return [
         /* ['header' => 'account_settings'], */
         [
             'text' => 'Mi perfil',
-            'url'  => 'admin/settings',
+            'url'  => 'profile',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'Crear cuento',
-            'url'  => 'crear_cuento',
+            'text' => 'Mis cuentos',
+            'url'  => 'cuento',
             'icon' => 'fas fa-book-open',
         ],
-        [
+        /*[
             'text' => 'Mis cuentos',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-book',
-        ],
+        ],*/
         /* [
             'text'    => 'multilevel',
             'icon'    => 'fas fa-fw fa-share',

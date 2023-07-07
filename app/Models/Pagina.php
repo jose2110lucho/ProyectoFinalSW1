@@ -19,40 +19,28 @@ use Illuminate\Database\Eloquent\Model;
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
+
 class Pagina extends Model
 {
+    protected $table = 'pagina';
     
-    static $rules = [
-		'text' => 'required',
-		'numeracion' => 'required',
-		'cuento_id' => 'required',
-    ];
-
+   
     protected $perPage = 20;
 
-    /**
-     * Attributes that should be mass-assignable.
-     *
-     * @var array
-     */
+    
     protected $fillable = ['text','numeracion','cuento_id'];
 
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
+    
     public function cuento()
     {
         return $this->hasOne('App\Models\Cuento', 'id', 'cuento_id');
     }
     
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+
     public function ilustracions()
     {
         return $this->hasMany('App\Models\Ilustracion', 'pagina_id', 'id');
     }
     
-
 }

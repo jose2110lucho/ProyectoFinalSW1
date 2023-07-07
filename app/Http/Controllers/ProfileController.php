@@ -7,12 +7,7 @@ use App\Models\User; // Asegúrate de importar el modelo User
 
 class ProfileController extends Controller
 {
-    public function show()
-    {
-        $user = auth()->user(); // Obtener el usuario autenticado actualmente
-
-        return view('profile.show', compact('user'));
-    }
+    
 
     public function edit()
     {
@@ -21,6 +16,12 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user'));
     }
 
+    public function show()
+    {
+        $user = auth()->user(); // Obtener el usuario autenticado actualmente
+
+        return view('profile.show', compact('user'));
+    }
     public function update(Request $request)
     {
         $user = auth()->user(); // Obtener el usuario autenticado actualmente

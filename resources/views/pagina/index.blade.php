@@ -13,18 +13,15 @@ Pagina
                 <div class="card-header">
                     <div class="card text-center">
                         <P></P>
-                        <h6 class="card-title">TITULO</h6>
+                        <h6 class="card-title">{{ $cuento->titulo }}</h6>
                         <P></P>
                     </div>
            
-
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-
-                        
 
                         <div class="float-left">
                             
-                            <a href="{{ route('paginas.create') }}" class="btn btn-primary btn-sm float-right shadow sm"
+                            <a href="{{ route('pagina.create', ['id' => $id]) }}" class="btn  btn-sm float-right shadow sm" style="background-color: #12CB55; width:300px"
                                 data-placement="left">
                                 {{ __('Crear Pagina') }}
                             </a>
@@ -96,8 +93,8 @@ Pagina
                                     <td>
                                         @csrf
                                         <a class="table" type="submit"
-                                            href="{{ route('paginas.show',$pagina->id) }}">Pagina
-                                            {{$pagina->numeracion}}</a>
+                                            href="{{ route('pagina.show',[$pagina->id, $pagina->cuento_id]) }}">Pagina
+                                            {{$pagina->id}}</a>
                                     </td>
 
                                     <td></td>
@@ -117,12 +114,9 @@ Pagina
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        <form action="{{ route('paginas.destroy',$pagina->id) }}" method="POST">
-
-
+                                        <form action="{{ route('pagina.destroy',[$pagina->id, $pagina->cuento_id]) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-
                                             <button type="submit" class="btn btn-success btn-sm float-none "><i
                                                     class="fa fa-fw fa-trash"></i></button>
 
@@ -130,7 +124,7 @@ Pagina
                                     </td>
 
                                     <td><a class="btn btn-dark btn-sm float-none"
-                                            href="{{ route('paginas.edit',$pagina->id) }}"><i
+                                            href="{{ route('pagina.edit',[$pagina->id, $pagina->cuento_id]) }}"><i
                                                 class="fa fa-fw fa-edit"></i></a></td>
                                 </tr>
                                 @endforeach

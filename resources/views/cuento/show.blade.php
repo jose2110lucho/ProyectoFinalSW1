@@ -1,7 +1,7 @@
-@extends('adminlte::page')
+@extends('layouts.app')
 
 @section('template_title')
-{{ __('Mostrar') }} Pagina 
+    {{ $cuento->name ?? "{{ __('Show') Cuento" }}
 @endsection
 
 @section('content')
@@ -11,30 +11,26 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="float-left">
-                            <span class="card-title">{{ __('Leer') }} Pagina {{ $pagina->id }}</span>
+                            <span class="card-title">{{ __('Show') }} Cuento</span>
                         </div>
                         <div class="float-right">
-                            <a class="btn btn-primary" href="{{ route('pagina.index', ['id' => $pagina->cuento_id]) }}"> {{ __('Volver') }}</a>
+                            <a class="btn btn-primary" href="{{ route('cuentos.index') }}"> {{ __('Back') }}</a>
                         </div>
                     </div>
-
+                    @foreach ($cuentos as $cuento)
                     <div class="card-body">
-
+                        
                         <div class="form-group">
-                            <strong>Nombre del libro:</strong>
+                            <strong>Fecha:</strong>
+                            {{ $cuento->fecha }}
+                        </div>
+                        <div class="form-group">
+                            <strong>Titulo:</strong>
                             {{ $cuento->titulo }}
                         </div>
 
-                        <div class="form-group">
-                            <strong>Pagina:</strong>
-                            {{ $pagina->id }}
-                        </div>
-
-                        <div class="form-group">
-                            <strong>Text:</strong>
-                            {{ $pagina->text }}
-                        </div>
                     </div>
+                    @endfor
                 </div>
             </div>
         </div>
