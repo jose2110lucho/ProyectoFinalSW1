@@ -22,6 +22,7 @@
                         <form method="POST" action="{{ route('pagina.store', ['id' => $id]) }}" role="form" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="cuento_id" value="{{ $id }}"> <!-- Agregar un campo oculto para enviar el $id -->
+                            
                             <div class="box box-info padding-1">
                                 <div class="box-body">
                                     
@@ -37,6 +38,7 @@
                                     <div class="row">
                                         <div id="imagen" style="display: flex; justify-content: center; align-items: center; border: 1px solid grey; margin: 10px auto;" name="imagen" ></div>
                                         <input type="hidden" name="imageUrl" id="imageUrl" value="">
+                                        <input type="hidden" name="descripcion" id="descripcion" value="">
                                     </div>  
                                 </div>
                                 <div class="center" style="text-align: center; margin-top:20px;">
@@ -56,14 +58,14 @@
 
                 <div class="card card-default">
                     <div class="card-header">
-                        <span class="card-title">{{ __('Create') }} Pagina</span>
+                        <span class="card-title">{{ __('Generar') }} Imagen</span>
                     </div>
                     <div class="card-body">
                         <input type="text" name="id" id="id" value="{{$id}}" hidden>
                         <!-- Prompt input form -->
                         <form id="prompt-form">
-                            <input type="text" name="prompt" id="prompt-input" placeholder="Enter your prompt">
-                            <button type="submit">Generate Images</button>
+                            <input type="text" name="prompt" id="prompt-input" placeholder="Ingrese descripcion">
+                            <button type="submit">Generar</button>
                         </form>
 
                         <!-- Generated images -->
@@ -114,7 +116,7 @@
 
                 document.getElementById('imageUrl').value = selectedImage;
             });
-
+            document.getElementById('descripcion').value = promptInput.value;
             imagesContainer.appendChild(imgElement);
         });
     } catch (error) {

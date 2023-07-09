@@ -34,6 +34,15 @@
                             <strong>Text:</strong>
                             {{ $pagina->text }}
                         </div>
+
+                        <div class="form-group">
+                            <img src="{{ $pagina->url }}" alt="Image">
+                        </div>
+
+                        <div class="form-group">
+                            <strong>Descripcion:</strong>
+                            {{ $pagina->descripcion }}
+                        </div>
                     </div>
                 </div>
             </div>

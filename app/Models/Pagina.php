@@ -28,7 +28,7 @@ class Pagina extends Model
     protected $perPage = 20;
 
     
-    protected $fillable = ['text','numeracion','cuento_id'];
+    protected $fillable = ['text','numeracion','url','descripcion','cuento_id'];
 
 
     

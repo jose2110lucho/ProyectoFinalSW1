@@ -39,10 +39,6 @@ Route::get('pagina/{id}/create', [PaginaController::class, 'create'])->name('pag
 
 Route::get('pagina/{id}/generar/{prompt}', [PaginaController::class, 'generar'])->name('pagina.generar');
 
-
-
-Route::post('pagina/{id}/guardar-imagen', [PaginaController::class, 'guardarImagen'])->name('pagina.guardar-imagen');
-
 Route::post('pagina/{id}/store', [PaginaController::class, 'store'])->name('pagina.store');
 Route::get('pagina/{id}/{cuento_id}/show', [PaginaController::class, 'show'])->name('pagina.show');
 Route::get('pagina/{id}/{cuento_id}/edit', [PaginaController::class, 'edit'])->name('pagina.edit');

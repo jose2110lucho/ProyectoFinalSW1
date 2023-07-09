@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('pagina', function (Blueprint $table) {
             $table->unsignedBigInteger('id');
             $table->string('text');
+            $table->string('url');
+            $table->string('descripcion');
             $table->unsignedBigInteger('cuento_id');
             $table->foreign('cuento_id')->references('id')->on('cuento')->onDelete('cascade');
             $table->primary(['id', 'cuento_id']);
