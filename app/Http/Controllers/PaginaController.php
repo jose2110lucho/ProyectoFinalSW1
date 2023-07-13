@@ -7,6 +7,7 @@ use App\Models\Pagina;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+
 use Orhanerday\OpenAi\OpenAi;
 
 class PaginaController extends Controller
@@ -39,28 +40,33 @@ class PaginaController extends Controller
             'descripcion' => 'required|string'
         ]);
 
-        $imagen = $request->imageUrl;
-
-        //Creamos nueva imagen
-        $imagenContenido = file_get_contents($imagen);
-        $imagenNombre = 'imageUrl_' . time() . '.jpg'; // Genera nombre unico
-        Storage::disk('public')->put($imagenNombre, $imagenContenido);
-    
-        //Accedemos a la ruta de la nueva imagen
-        $imagenPath = asset('storage/' . $imagenNombre);
-    
-        $pagina = new Pagina();
-        $pagina->id = $request->numeracion;
-        $pagina->text = $request->text;
-        $pagina->url = $imagenPath;
-        $pagina->descripcion = $request->descripcion;
-        $pagina->cuento_id = $id;
+        $query = Pagina::where('id', $request->numeracion)->where('cuento_id', $id)->exists();
         
-        $pagina->save();
+        if($query == false){
+            $imagen = $request->imageUrl;
 
-        return redirect()->route('pagina.index', ['id' => $id])
-            ->with('success', 'Pagina created successfully.');
-
+            //Creamos nueva imagen
+            $imagenContenido = file_get_contents($imagen);
+            $imagenNombre = 'imageUrl_' . time() . '.jpg'; // Genera nombre unico
+            Storage::disk('public')->put($imagenNombre, $imagenContenido);
+        
+            //Accedemos a la ruta de la nueva imagen
+            $imagenPath = asset('storage/' . $imagenNombre);
+        
+            $pagina = new Pagina();
+            $pagina->id = $request->numeracion;
+            $pagina->text = $request->text;
+            $pagina->url = $imagenPath;
+            $pagina->descripcion = $request->descripcion;
+            $pagina->cuento_id = $id;
+            
+            $pagina->save();
+    
+            return redirect()->route('pagina.index', ['id' => $id])
+                ->with('success', 'Nueva pagina añadida al cuento.');
+        }
+        return redirect()->route('pagina.create', ['id' => $id])
+        ->with('success', 'El numero de pagina ya exite en este cuento.');
     }
 
 
@@ -69,6 +75,7 @@ class PaginaController extends Controller
         $cuento = Cuento::find($cuento_id);
         $query = Pagina::where('id', $id)->where('cuento_id', $cuento_id)->get();
         $pagina = $query[0];
+        
         return view('pagina.show', compact('pagina','cuento'));
     }
 
@@ -90,33 +97,46 @@ class PaginaController extends Controller
             'descripcion' => 'required|string'
         ]);
 
-        //Creamos nueva imagen
-        $imagen = $request->imageUrl;
-        $imagenContenido = file_get_contents($imagen);
-        $imagenNombre = 'imageUrl_' . time() . '.jpg'; // Generate a unique image name
-        Storage::disk('public')->put($imagenNombre, $imagenContenido);
-    
-        //Accedemos a la ruta de la nueva imagen
-        $imagePath = asset('storage/' . $imagenNombre);
-
-        //Eliminamos imagen vieja
         $query = Pagina::where('id', $id)->where('cuento_id', $cuento_id)->get();
-        $pagina = $query[0];
-        $imageUrl = $pagina->url;
+        
+        if($query[0]->url != $request->imageUrl){
+            //Creamos nueva imagen
+            $imagen = $request->imageUrl;
+            $imagenContenido = file_get_contents($imagen);
+            $imagenNombre = 'imageUrl_' . time() . '.jpg'; // Generate a unique image name
+            Storage::disk('public')->put($imagenNombre, $imagenContenido);
+        
+            //Accedemos a la ruta de la nueva imagen
+            $imagePath = asset('storage/' . $imagenNombre);
 
-        if ($imageUrl) {
-            $deleteImagePath = str_replace(url('http://127.0.0.1:8000/storage/'), '', $imageUrl); // Remueve la url de imageUrl, deja solo el nombre
-            Storage::disk('public')->delete($deleteImagePath);
+            //Eliminamos imagen vieja
+            $query = Pagina::where('id', $id)->where('cuento_id', $cuento_id)->get();
+            $pagina = $query[0];
+            $imageUrl = $pagina->url;
+
+            if ($imageUrl) {
+                $deleteImagePath = str_replace(url('http://127.0.0.1:8000/storage/'), '', $imageUrl); // Remueve la url de imageUrl, deja solo el nombre
+                Storage::disk('public')->delete($deleteImagePath);
+            }
+            DB::table('pagina')
+                ->where('id', $id)
+                ->where('cuento_id',  $cuento_id)
+                ->update(['text' => $request->text,
+                        'url' => $imagePath,
+                        'descripcion' => $request->descripcion
+                        ]);
+        }else{
+            DB::table('pagina')
+                ->where('id', $id)
+                ->where('cuento_id',  $cuento_id)
+                ->update(['text' => $request->text,
+                        'descripcion' => $request->descripcion
+                        ]);
         }
+        
 
         //Update
-        DB::table('pagina')
-        ->where('id', $id)
-        ->where('cuento_id',  $cuento_id)
-        ->update(['text' => $request->text,
-                  'url' => $imagePath,
-                  'descripcion' => $request->descripcion
-                ]);
+        
     
         return redirect()->route('pagina.index', ['id' => $cuento_id])
             ->with('success', 'Pagina updated successfully');
@@ -124,7 +144,7 @@ class PaginaController extends Controller
 
     public function destroy($id,$cuento_id)
     {
-
+        //Eliminar imagen
         $query = Pagina::where('id', $id)->where('cuento_id', $cuento_id)->get();
         $pagina = $query[0];
 
@@ -135,6 +155,7 @@ class PaginaController extends Controller
             Storage::disk('public')->delete($imagePath);
         }
 
+        //Eliminar de la base
         $query = Pagina::where('id', $id)->where('cuento_id', $cuento_id);
         $query->delete();
     
@@ -144,10 +165,10 @@ class PaginaController extends Controller
 
     public function generar($id,$prompt)
     {
-        $open_ai_key = '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';
+        $open_ai_key = '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';
 
         $open_ai = new OpenAi($open_ai_key);
-
+        
         $images = $open_ai->image(
             [
                 "prompt" => $prompt,
@@ -155,6 +176,7 @@ class PaginaController extends Controller
                 "size" => "512x512",
              ]
         );
+       
 
         $responseData = json_decode($images, true);
         

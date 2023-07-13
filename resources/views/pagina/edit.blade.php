@@ -13,26 +13,35 @@
 
                 <div class="card card-default">
                     <div class="card-header">
-                        <span class="card-title">{{ __('Editar') }} Pagina {{ $pagina->id }}</span>
+                        <div class="float-left " >
+                            <span class="card-title">{{ __('Escribir') }} Nueva Pagina</span>
+                        </div>
+                        <div class="float-right">
+                            <a class="btn btn-primary" href="{{ route('pagina.index', ['id' => $pagina->cuento_id]) }}"> {{ __('Volver') }}</a>
+                        </div>
                     </div>
                     <div class="card-body">
                     <form method="POST" action="{{ route('pagina.update', [$pagina->id, $pagina->cuento_id]) }}" role="form" enctype="multipart/form-data">
 
                             {{ method_field('PATCH') }}
                             @csrf
-
+                            
                             <div class="box box-info padding-1">
                                 <div class="box-body">
                                     <div class="row">
+                                        {{--Edita el texto de la pagina--}}
                                         <label for="text" class="col-sm-2 col-form-label"> Texto </label>
                                         <textarea type="text" id="text" class="form-control" style="height: 300px;"  name="text">{{ $pagina->text }}</textarea>
                                     </div>
                                 </div>
+
                                 <div class="row">
+                                    {{--Edita el texto de la pagina--}}
                                     <div id="imagen" style="display: flex; justify-content: center; align-items: center; border: 1px solid grey; margin: 10px auto;" name="imagen" ></div>
                                     <input type="hidden" name="imageUrl" id="imageUrl" value="{{ $pagina->url }}">
                                     <input type="hidden" name="descripcion" id="descripcion" value="{{ $pagina->descripcion }}">
                                 </div>  
+
                                 <div class="center" style="text-align: center; margin-top:20px;">
                                     <button  class="btn btn-success">
                                         <img src="{{ asset('img/crear_cuento1.jpg') }}" alt="Imagen"> 
@@ -67,6 +76,7 @@
             </div>
         </div>
     </section>
+    
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         const promptForm = document.getElementById('prompt-form');

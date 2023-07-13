@@ -23,7 +23,7 @@ Pagina
                             
                             <a href="{{ route('pagina.create', ['id' => $id]) }}" class="btn  btn-sm float-right shadow sm" style="background-color: #12CB55; width:300px"
                                 data-placement="left">
-                                {{ __('Crear Pagina') }}
+                                {{ __('Escribir Nueva Pagina') }}
                             </a>
                             
                         </div>

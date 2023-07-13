@@ -16,8 +16,18 @@
 
                 <div class="card card-default">
                     <div class="card-header">
-                        <span class="card-title">{{ __('Create') }} Pagina</span>
+                        <div class="float-left">
+                            <span class="card-title">{{ __('Escribir') }} Nueva Pagina</span>
+                        </div>
+                        <div class="float-right">
+                            <a class="btn btn-primary" href="{{ route('pagina.index', ['id' => $id]) }}"> {{ __('Volver') }}</a>
+                        </div>
                     </div>
+                @if ($message = Session::get('success'))
+                    <div class="alert alert-success">
+                        <p>{{ $message }}</p>
+                    </div>
+                @endif
                     <div class="card-body">
                         <form method="POST" action="{{ route('pagina.store', ['id' => $id]) }}" role="form" enctype="multipart/form-data">
                             @csrf
@@ -33,7 +43,9 @@
 
                                     <div class="row">
                                         <label for="text" class="col-sm-2 col-form-label"> Texto </label>
-                                        <textarea type="text" id="text" class="form-control" style="height: 300px;"  name="text"></textarea>
+                                        <textarea type="text" id="text" class="form-control" style="height: 300px;"  name="text" x-webkit-speech ></textarea>
+                                        <button id="textSpeechButton" type="button">Start Speech Recognition for Text</button>
+
                                     </div>  
                                     <div class="row">
                                         <div id="imagen" style="display: flex; justify-content: center; align-items: center; border: 1px solid grey; margin: 10px auto;" name="imagen" ></div>
@@ -64,8 +76,11 @@
                         <input type="text" name="id" id="id" value="{{$id}}" hidden>
                         <!-- Prompt input form -->
                         <form id="prompt-form">
-                            <input type="text" name="prompt" id="prompt-input" placeholder="Ingrese descripcion">
+                            <input type="text" name="prompt" id="prompt-input" placeholder="Ingrese descripcion" x-webkit-speech> 
+                            <button id="promptSpeechButton" type="button">Start Speech Recognition for Prompt</button>
+                            
                             <button type="submit">Generar</button>
+                            
                         </form>
 
                         <!-- Generated images -->
@@ -79,50 +94,86 @@
     
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        const promptForm = document.getElementById('prompt-form');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+
+        recognition.lang = 'en-US'; // Set the language if needed
+
+        const textInput = document.getElementById('text');
+        const textSpeechButton = document.getElementById('textSpeechButton');
+
+        textSpeechButton.addEventListener('click', () => {
+            recognition.start();
+            textInput.focus();
+        });
+
+        textInput.addEventListener('blur', () => {
+            recognition.stop();
+        });
+
         const promptInput = document.getElementById('prompt-input');
+        const promptSpeechButton = document.getElementById('promptSpeechButton');
+
+        promptSpeechButton.addEventListener('click', () => {
+            recognition.start();
+            promptInput.focus();
+        });
+
+        promptInput.addEventListener('blur', () => {
+            recognition.stop();
+        });
+
+        recognition.addEventListener('result', (event) => {
+            const transcript = event.results[0][0].transcript;
+
+            if (document.activeElement === textInput) {
+            textInput.value = transcript;
+            } else if (document.activeElement === promptInput) {
+            promptInput.value = transcript;
+            }
+        });
+        const promptForm = document.getElementById('prompt-form');
         const imagesContainer = document.getElementById('images-container');
         const firstFormImagesContainer  = document.getElementById('imagen');
 
 
         const id = document.getElementById('id').value;
 
+
         promptForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-    const prompt = promptInput.value;
+            const prompt = promptInput.value;
+            try {
+                const response = await axios.get(`/pagina/${id}/generar/${prompt}`);
+                const images = response.data.images;
+                console.log(images);
+                imagesContainer.innerHTML = '';
 
-    try {
-        const response = await axios.get(`/pagina/${id}/generar/${prompt}`);
+                images.forEach(image => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = image;
+                    imgElement.alt = 'Generated Image';
 
-        const images = response.data.images;
-        console.log(images);
-        imagesContainer.innerHTML = '';
+                    imgElement.addEventListener('click', () => {
+                        selectedImage = image;
+                        firstFormImagesContainer.innerHTML = '';
 
-        images.forEach(image => {
-            const imgElement = document.createElement('img');
-            imgElement.src = image;
-            imgElement.alt = 'Generated Image';
+                        const imgElement = document.createElement('img');
+                        imgElement.src = selectedImage;
+                        imgElement.alt = 'Selected Image';
 
-            imgElement.addEventListener('click', () => {
-                selectedImage = image;
-                firstFormImagesContainer.innerHTML = '';
+                        firstFormImagesContainer.appendChild(imgElement);
 
-                const imgElement = document.createElement('img');
-                imgElement.src = selectedImage;
-                imgElement.alt = 'Selected Image';
-
-                firstFormImagesContainer.appendChild(imgElement);
-
-                document.getElementById('imageUrl').value = selectedImage;
-            });
-            document.getElementById('descripcion').value = promptInput.value;
-            imagesContainer.appendChild(imgElement);
-        });
-    } catch (error) {
-        console.error('Error:', error);
-    }
-});
+                        document.getElementById('imageUrl').value = selectedImage;
+                    });
+                    document.getElementById('descripcion').value = promptInput.value;
+                    imagesContainer.appendChild(imgElement);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+    });
     </script>
 @endsection
 
