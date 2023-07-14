@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('adminlte::page')
 
 @section('template_title')
-    {{ $cuento->name ?? "{{ __('Show') Cuento" }}
+    {{ __('Leer') }} Cuento
 @endsection
 
 @section('content')
@@ -11,27 +11,42 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="float-left">
-                            <span class="card-title">{{ __('Show') }} Cuento</span>
+                            <span class="card-title">{{ __('Leer') }} Cuento {{ $cuento->titulo }}</span>
                         </div>
                         <div class="float-right">
-                            <a class="btn btn-primary" href="{{ route('cuentos.index') }}"> {{ __('Back') }}</a>
+                            <a class="btn btn-primary" href="{{ route('cuento.index') }}"> {{ __('Volver') }}</a>
                         </div>
                     </div>
-                    @foreach ($cuentos as $cuento)
-                    <div class="card-body">
-                        
-                        <div class="form-group">
-                            <strong>Fecha:</strong>
-                            {{ $cuento->fecha }}
-                        </div>
-                        <div class="form-group">
-                            <strong>Titulo:</strong>
-                            {{ $cuento->titulo }}
-                        </div>
-
-                    </div>
-                    @endfor
                 </div>
+                @foreach ($paginas as $pagina)
+                <div class="card">
+                    <div class="card-body"> 
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <strong>Pagina:</strong>
+                                    {{ $pagina->id }}
+                                </div>
+                        
+                                <div class="form-group">
+                                    <strong>Text:</strong>
+                                    {{ $pagina->text }}
+                                </div>
+                            </div>                           
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <img src="{{ $pagina->url }}" alt="Image">
+                                </div>
+                        
+                                <div class="form-group">
+                                    <strong>Descripcion:</strong>
+                                    {{ $pagina->descripcion }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach             
             </div>
         </div>
     </section>

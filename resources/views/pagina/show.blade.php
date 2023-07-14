@@ -19,29 +19,33 @@
                     </div>
 
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <strong>Nombre del libro:</strong>
+                                    {{ $cuento->titulo }}
+                                </div>
 
-                        <div class="form-group">
-                            <strong>Nombre del libro:</strong>
-                            {{ $cuento->titulo }}
-                        </div>
-
-                        <div class="form-group">
-                            <strong>Pagina:</strong>
-                            {{ $pagina->id }}
-                        </div>
-
-                        <div class="form-group">
-                            <strong>Text:</strong>
-                            {{ $pagina->text }}
-                        </div>
-
-                        <div class="form-group">
-                            <img src="{{ $pagina->url }}" alt="Image">
-                        </div>
-
-                        <div class="form-group">
-                            <strong>Descripcion:</strong>
-                            {{ $pagina->descripcion }}
+                                <div class="form-group">
+                                    <strong>Pagina:</strong>
+                                    {{ $pagina->id }}
+                                </div>
+                        
+                                <div class="form-group">
+                                    <strong>Text:</strong>
+                                    {{ $pagina->text }}
+                                </div>
+                            </div>                           
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <img src="{{ $pagina->url }}" alt="Image">
+                                </div>
+                        
+                                <div class="form-group">
+                                    <strong>Descripcion:</strong>
+                                    {{ $pagina->descripcion }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

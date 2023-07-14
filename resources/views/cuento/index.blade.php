@@ -44,6 +44,8 @@
                                     <th>Fecha</th>
                                     <th>Titulo</th>
                                     <th>Leer</th>
+                                    <th>Descargar</th>
+                                    <th>Editar</th>
                                     <th>Eliminar</th>
 
                                 </tr>
@@ -54,17 +56,31 @@
                                     <td>{{ $cuento->fecha }}</td>
                                     <td>
                                         @csrf
-                                        <a href="{{ route('pagina.index', ['id' => $cuento->id]) }}">
-                                            {{ $cuento->titulo }}</a>
+                                        <a href="{{ route('pagina.index', ['id' => $cuento->id]) }}" class="btn btn-warning">
+                                            <i class="bi bi-file-pdf">{{ $cuento->titulo }}</i>
+                                        </a>
                                     </td>
 
-                                    <td class="td-actions text-right">
+                                    <td>
+                                        <a href="{{ route('cuento.show',$cuento->id) }}" class="btn btn-warning">
+                                            <i class="bi bi-file-pdf">Leer</i>
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        <a href="{{ route('cuento.descargar', ['id' => $cuento->id]) }}" class="btn btn-warning">
+                                            <i class="bi bi-file-pdf">descargar</i>
+                                        </a>
+                                    </td>
+
+                                    <td>
                                         {{--Ver PDF--}}
                                         <a href="{{ route('cuento.edit',$cuento->id) }}" class="btn btn-warning">
-
                                             <i class="bi bi-file-pdf">Editar</i>
-
                                         </a>
+                                    </td>
+                                    
+                                    <td>    
                                         {{--Eliminar--}}
                                         <form action="{{ route('cuento.destroy',$cuento->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('¿Está seguro?')">
                                             @csrf

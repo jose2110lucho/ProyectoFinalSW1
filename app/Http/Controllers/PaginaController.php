@@ -17,7 +17,7 @@ class PaginaController extends Controller
     {
         $cuento = Cuento::find($id);
         $paginas = Pagina::where('cuento_id', $id)->paginate();
-    
+        
         return view('pagina.index', compact('paginas', 'id','cuento'))
             ->with('i', (request()->input('page', 1) - 1) * $paginas->perPage());
     }
@@ -165,7 +165,7 @@ class PaginaController extends Controller
 
     public function generar($id,$prompt)
     {
-        $open_ai_key = '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';
+        $open_ai_key = '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';
 
         $open_ai = new OpenAi($open_ai_key);
         

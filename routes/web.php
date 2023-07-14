@@ -31,7 +31,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
 Route::resource('cuento', CuentoController::class)->middleware('auth');
+
+Route::get('cuento/{id}/descargar', [CuentoController::class, 'descargar'])->name('cuento.descargar');
 
 
 Route::get('pagina/{id}', [PaginaController::class, 'index'])->name('pagina.index');
@@ -41,6 +44,7 @@ Route::get('pagina/{id}/generar/{prompt}', [PaginaController::class, 'generar'])
 
 Route::post('pagina/{id}/store', [PaginaController::class, 'store'])->name('pagina.store');
 Route::get('pagina/{id}/{cuento_id}/show', [PaginaController::class, 'show'])->name('pagina.show');
+
 Route::get('pagina/{id}/{cuento_id}/edit', [PaginaController::class, 'edit'])->name('pagina.edit');
 Route::patch('/pagina/{id}/{cuento_id}/update',  [PaginaController::class, 'update'])->name('pagina.update');
 Route::delete('pagina/{id}/{cuento_id}/destroy', [PaginaController::class, 'destroy'])->name('pagina.destroy');

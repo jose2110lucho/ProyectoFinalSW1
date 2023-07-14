@@ -44,7 +44,7 @@
                                     <div class="row">
                                         <label for="text" class="col-sm-2 col-form-label"> Texto </label>
                                         <textarea type="text" id="text" class="form-control" style="height: 300px;"  name="text" x-webkit-speech ></textarea>
-                                        <button id="textSpeechButton" type="button">Start Speech Recognition for Text</button>
+                                        <button id="textSpeechButton" type="button">Escribir por voz</button>
 
                                     </div>  
                                     <div class="row">
@@ -77,7 +77,7 @@
                         <!-- Prompt input form -->
                         <form id="prompt-form">
                             <input type="text" name="prompt" id="prompt-input" placeholder="Ingrese descripcion" x-webkit-speech> 
-                            <button id="promptSpeechButton" type="button">Start Speech Recognition for Prompt</button>
+                            <button id="promptSpeechButton" type="button">Escribir por voz</button>
                             
                             <button type="submit">Generar</button>
                             
@@ -97,7 +97,7 @@
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
 
-        recognition.lang = 'en-US'; // Set the language if needed
+        recognition.lang = 'es-ES'; // Set the language if needed
 
         const textInput = document.getElementById('text');
         const textSpeechButton = document.getElementById('textSpeechButton');
@@ -127,9 +127,9 @@
             const transcript = event.results[0][0].transcript;
 
             if (document.activeElement === textInput) {
-            textInput.value = transcript;
+                textInput.value += ' ' + transcript;
             } else if (document.activeElement === promptInput) {
-            promptInput.value = transcript;
+                promptInput.value += ' ' + transcript;
             }
         });
         const promptForm = document.getElementById('prompt-form');
