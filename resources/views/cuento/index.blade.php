@@ -56,20 +56,20 @@
                                     <td>{{ $cuento->fecha }}</td>
                                     <td>
                                         @csrf
-                                        <a href="{{ route('pagina.index', ['id' => $cuento->id]) }}" class="btn btn-warning">
+                                        <a href="{{ route('pagina.index', ['id' => $cuento->id]) }}" class="btn btn-dark">
                                             <i class="bi bi-file-pdf">{{ $cuento->titulo }}</i>
                                         </a>
                                     </td>
 
                                     <td>
-                                        <a href="{{ route('cuento.show',$cuento->id) }}" class="btn btn-warning">
+                                        <a href="{{ route('cuento.show',$cuento->id) }}" class="btn btn-light">
                                             <i class="bi bi-file-pdf">Leer</i>
                                         </a>
                                     </td>
 
                                     <td>
-                                        <a href="{{ route('cuento.descargar', ['id' => $cuento->id]) }}" class="btn btn-warning">
-                                            <i class="bi bi-file-pdf">descargar</i>
+                                        <a href="{{ route('cuento.descargar', ['id' => $cuento->id]) }}" class="btn btn-success">
+                                            <i class="bi bi-file-pdf">Descargar</i>
                                         </a>
                                     </td>
 

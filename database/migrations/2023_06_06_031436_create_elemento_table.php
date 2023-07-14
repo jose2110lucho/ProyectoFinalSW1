@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('elemento', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
+            $table->text('text');
+            $table->text('url');
+            $table->text('descripcion');
             $table->unsignedBigInteger('cuento_id');
             $table->foreign('cuento_id')->references('id')->on('cuento');
             $table->unsignedBigInteger('tipo_id');

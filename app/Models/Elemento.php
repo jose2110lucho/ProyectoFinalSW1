@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property $id
  * @property $text
- * @property $numeracion
  * @property $cuento_id
+ * @property $tipo_id
  * @property $created_at
  * @property $updated_at
  *
@@ -20,15 +20,15 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
 
-class Pagina extends Model
+class Elemento extends Model
 {
-    protected $table = 'pagina';
+    protected $table = 'elemento';
     
    
     protected $perPage = 20;
 
     
-    protected $fillable = ['text','numeracion','url','descripcion','cuento_id'];
+    protected $fillable = ['nombre','text','url','descripcion','cuento_id','tipo_id'];
 
 
     
@@ -36,5 +36,10 @@ class Pagina extends Model
     {
         return $this->hasOne('App\Models\Cuento', 'id', 'cuento_id');
     }
-        
+
+    public function tipo()
+    {
+        return $this->hasOne('App\Models\Tipo', 'id', 'tipo_id');
+    }
+    
 }

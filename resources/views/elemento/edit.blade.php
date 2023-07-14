@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 
 @section('template_title')
-    {{ __('Editar') }} Pagina 
+    {{ __('Editar') }} Elemento 
 @endsection
 
 @section('content')
@@ -14,34 +14,39 @@
                 <div class="card card-default">
                     <div class="card-header">
                         <div class="float-left " >
-                            <span class="card-title">{{ __('Escribir') }} Nueva Pagina</span>
+                            <span class="card-title">{{ __('Escribir') }} Nuevo Elemento</span>
                         </div>
                         <div class="float-right">
-                            <a class="btn btn-primary" href="{{ route('pagina.index', ['id' => $pagina->cuento_id]) }}"> {{ __('Volver') }}</a>
+                            <a class="btn btn-primary" href="{{ route('elemento.index', ['id' => $elemento->cuento_id]) }}"> {{ __('Volver') }}</a>
                         </div>
                     </div>
                     <div class="card-body">
-                    <form method="POST" action="{{ route('pagina.update', [$pagina->id, $pagina->cuento_id]) }}" role="form" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('elemento.update', [$elemento->id, $elemento->cuento_id]) }}" role="form" enctype="multipart/form-data">
 
                             {{ method_field('PATCH') }}
                             @csrf
                             
+                            <div class="row">
+                                <label for="nombre" class="col-sm-2 col-form-label"> Nombre </label>
+                                <input type="text" id="nombre" class="form-control " name="nombre"  value="{{ $elemento->nombre }}"required>
+                            </div>
+
                             <div class="box box-info padding-1">
                                 <div class="box-body">
                                     <div class="row">
-                                        {{--Edita el texto de la pagina--}}
+                                        {{--Edita el texto del elemento--}}
                                         <label for="text" class="col-sm-2 col-form-label"> Texto </label>
-                                        <textarea type="text" id="text" class="form-control" style="height: 300px;"  name="text" x-webkit-speech >{{ $pagina->text }}</textarea>
+                                        <textarea type="text" id="text" class="form-control" style="height: 300px;"  name="text" x-webkit-speech >{{ $elemento->text }}</textarea>
                                         <button id="textSpeechButton" type="button">Escribir por voz</button>
     
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    {{--Edita el texto de la pagina--}}
+                                    {{--Edita el texto del elemento--}}
                                     <div id="imagen" style="display: flex; justify-content: center; align-items: center; border: 1px solid grey; margin: 10px auto;" name="imagen" ></div>
-                                    <input type="hidden" name="imageUrl" id="imageUrl" value="{{ $pagina->url }}">
-                                    <input type="hidden" name="descripcion" id="descripcion" value="{{ $pagina->descripcion }}">
+                                    <input type="hidden" name="imageUrl" id="imageUrl" value="{{ $elemento->url }}">
+                                    <input type="hidden" name="descripcion" id="descripcion" value="{{ $elemento->descripcion }}">
                                 </div>  
 
                                 <div class="center" style="text-align: center; margin-top:20px;">
@@ -64,7 +69,7 @@
                         <span class="card-title">{{ __('Generar') }} Imagen</span>
                     </div>
                     <div class="card-body">
-                        <input type="text" name="id" id="id" value="{{$pagina->cuento_id}}" hidden>
+                        <input type="text" name="id" id="id" value="{{$elemento->cuento_id}}" hidden>
                         <!-- Prompt input form -->
                         <form id="prompt-form">
                             <input type="text" name="prompt" id="prompt-input" placeholder="Ingrese descripcion" x-webkit-speech >

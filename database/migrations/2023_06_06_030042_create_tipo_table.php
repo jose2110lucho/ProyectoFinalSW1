@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Tipo;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,6 +17,12 @@ return new class extends Migration
             $table->string('nombre');
             $table->timestamps();
         });
+        Tipo::create([
+            'nombre'=>'Personaje',         
+        ]);
+        Tipo::create([
+            'nombre'=>'Escenario',
+        ]);
     }
 
     /**

@@ -3,46 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cuento;
-use App\Models\Pagina;
+use App\Models\Elemento;
+use App\Models\Tipo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
 use Orhanerday\OpenAi\OpenAi;
 
-class PaginaController extends Controller
+class ElementoController extends Controller
 {
- 
+   
     public function index($id)
     {
         $cuento = Cuento::find($id);
-        $paginas = Pagina::where('cuento_id', $id)->paginate();
+        $tipos = Tipo::all();
+        $elementos = Elemento::where('cuento_id', $id)->paginate();
         
-        return view('pagina.index', compact('paginas', 'id','cuento'))
-            ->with('i', (request()->input('page', 1) - 1) * $paginas->perPage());
+        return view('elemento.index', compact('elementos', 'id','cuento','tipos'))
+            ->with('i', (request()->input('page', 1) - 1) * $elementos->perPage());
     }
-    
 
+    
+    
 
     public function create($id)
     {
-        $pagina = new Pagina();
-        return view('pagina.create', compact('pagina', 'id'));
+        $elemento = new Elemento();
+        $tipos = Tipo::all();
+        return view('elemento.create', compact('elemento', 'id','tipos'));
     }
 
    
     public function store(Request $request, $id)
     {
         $request->validate([
+            'nombre' => 'required|string',
             'text' => 'required|string',
-            'numeracion' => 'required|integer',
             'imageUrl' => 'required|url',
-            'descripcion' => 'required|string'
+            'descripcion' => 'required|string',
+            'tipo' => 'required'
         ]);
 
-        $query = Pagina::where('id', $request->numeracion)->where('cuento_id', $id)->exists();
-        
-        if($query == false){
             $imagen = $request->imageUrl;
 
             //Creamos nueva imagen
@@ -53,38 +54,38 @@ class PaginaController extends Controller
             //Accedemos a la ruta de la nueva imagen
             $imagenPath = asset('storage/' . $imagenNombre);
         
-            $pagina = new Pagina();
-            $pagina->id = $request->numeracion;
-            $pagina->text = $request->text;
-            $pagina->url = $imagenPath;
-            $pagina->descripcion = $request->descripcion;
-            $pagina->cuento_id = $id;
+            $elemento = new Elemento();
+            $elemento->nombre = $request->nombre;
+            $elemento->text = $request->text;
+            $elemento->url = $imagenPath;
+            $elemento->descripcion = $request->descripcion;
+            $elemento->cuento_id = $id;
+            $elemento->tipo_id = $request->tipo;
             
-            $pagina->save();
+            $elemento->save();
     
-            return redirect()->route('pagina.index', ['id' => $id])
-                ->with('success', 'Nueva pagina añadida al cuento.');
-        }
-        return redirect()->route('pagina.create', ['id' => $id])
-        ->with('success', 'El numero de pagina ya exite en este cuento.');
+            return redirect()->route('elemento.index', ['id' => $id])
+                ->with('success', 'Nuevo elemento añadida al cuento.');
     }
 
 
     public function show($id,$cuento_id)
     {
         $cuento = Cuento::find($cuento_id);
-        $query = Pagina::where('id', $id)->where('cuento_id', $cuento_id)->get();
-        $pagina = $query[0];
-        
-        return view('pagina.show', compact('pagina','cuento'));
+        $query1 = Elemento::where('id', $id)->where('cuento_id', $cuento_id)->get();
+        $elemento = $query1[0];
+        $query2 = Tipo::where('id', $elemento->tipo_id)->get();
+        $tipo= $query2[0];
+
+        return view('elemento.show', compact('elemento','cuento','tipo'));
     }
 
     
     public function edit($id,$cuento_id)
     {
-        $query = Pagina::where('id', $id)->where('cuento_id', $cuento_id)->get();
-        $pagina = $query[0];
-        return view('pagina.edit', compact('pagina'));
+        $query = Elemento::where('id', $id)->where('cuento_id', $cuento_id)->get();
+        $elemento = $query[0];
+        return view('elemento.edit', compact('elemento'));
     }
 
     
@@ -92,12 +93,13 @@ class PaginaController extends Controller
     {
         
         $request->validate([
+            'nombre' => 'required|string',
             'text' => 'required|string',
             'imageUrl' => 'required|url',
             'descripcion' => 'required|string'
         ]);
 
-        $query = Pagina::where('id', $id)->where('cuento_id', $cuento_id)->get();
+        $query = Elemento::where('id', $id)->where('cuento_id', $cuento_id)->get();
         
         if($query[0]->url != $request->imageUrl){
             //Creamos nueva imagen
@@ -110,15 +112,15 @@ class PaginaController extends Controller
             $imagePath = asset('storage/' . $imagenNombre);
 
             //Eliminamos imagen vieja
-            $query = Pagina::where('id', $id)->where('cuento_id', $cuento_id)->get();
-            $pagina = $query[0];
-            $imageUrl = $pagina->url;
+            $query = Elemento::where('id', $id)->where('cuento_id', $cuento_id)->get();
+            $elemento = $query[0];
+            $imageUrl = $elemento->url;
 
             if ($imageUrl) {
                 $deleteImagePath = str_replace(url('http://127.0.0.1:8000/storage/'), '', $imageUrl); // Remueve la url de imageUrl, deja solo el nombre
                 Storage::disk('public')->delete($deleteImagePath);
             }
-            DB::table('pagina')
+            DB::table('elemento')
                 ->where('id', $id)
                 ->where('cuento_id',  $cuento_id)
                 ->update(['text' => $request->text,
@@ -126,7 +128,7 @@ class PaginaController extends Controller
                         'descripcion' => $request->descripcion
                         ]);
         }else{
-            DB::table('pagina')
+            DB::table('elemento')
                 ->where('id', $id)
                 ->where('cuento_id',  $cuento_id)
                 ->update(['text' => $request->text,
@@ -138,17 +140,17 @@ class PaginaController extends Controller
         //Update
         
     
-        return redirect()->route('pagina.index', ['id' => $cuento_id])
-            ->with('success', 'Pagina Editada');
+        return redirect()->route('elemento.index', ['id' => $cuento_id])
+            ->with('success', 'Elemento actualizado');
     }
 
     public function destroy($id,$cuento_id)
     {
         //Eliminar imagen
-        $query = Pagina::where('id', $id)->where('cuento_id', $cuento_id)->get();
-        $pagina = $query[0];
+        $query = Elemento::where('id', $id)->where('cuento_id', $cuento_id)->get();
+        $elemento = $query[0];
 
-        $imageUrl = $pagina->url;
+        $imageUrl = $elemento->url;
 
         if ($imageUrl) {
             $imagePath = str_replace(url('http://127.0.0.1:8000/storage/'), '', $imageUrl); // Remueve la url de imageUrl, deja solo el nombre
@@ -156,11 +158,11 @@ class PaginaController extends Controller
         }
 
         //Eliminar de la base
-        $query = Pagina::where('id', $id)->where('cuento_id', $cuento_id);
+        $query = Elemento::where('id', $id)->where('cuento_id', $cuento_id);
         $query->delete();
     
-        return redirect()->route('pagina.index', ['id' => $cuento_id])
-            ->with('success', 'Pagina Borrada.');
+        return redirect()->route('elemento.index', ['id' => $cuento_id])
+            ->with('success', 'Elemento borrada.');
     }
 
     public function generar($id,$prompt)
@@ -191,17 +193,4 @@ class PaginaController extends Controller
             'images' => $urls
         ]);
     }
-
-    
 }
-
-
-/*
-console.log(imageUrl);
-        const defaultImgElement = document.createElement('img');
-        defaultImgElement.src = imageUrl;
-        defaultImgElement.alt = 'Default Image';
-
-        firstFormImagesContainer.innerHTML = '';
-        firstFormImagesContainer.appendChild(defaultImgElement);
-*/ 

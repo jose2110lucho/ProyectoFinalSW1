@@ -8,8 +8,7 @@ use App\Models\Pagina;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Dompdf\Dompdf;
-use Dompdf\Options;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CuentoController extends Controller
 {
@@ -103,40 +102,13 @@ class CuentoController extends Controller
         $usuario = User::find($cuento->user_id);
         $paginas = Pagina::where('cuento_id', $id)->paginate();;
         
-
-        //Crea Instancia de Dompdf
-        $options = new Options();
-        $options->set('defaultFont', 'Arial');
-        $options->set('isRemoteEnable', true); // Enable fetching remote images
-        $dompdf = new Dompdf($options);
-    
-        // Load HTML content for the PDF
-        $html = '<html><body>';
-    
-        // Loop through the paginas and add the information to the PDF
-        foreach ($paginas as $pagina) {
-            $html .= '<div><strong>Pagina:</strong> ' . $pagina->id . '</div>';
-            $html .= '<div><strong>Text:</strong> ' . $pagina->text . '</div>';
-            $html .= '<div><img src="' . $pagina->url . '" alt="Image"></div>';
-            $html .= '<div><strong>Descripcion:</strong> ' . $pagina->descripcion . '</div>';
-    
-            // Add some space between each pagina
-            $html .= '<br>';
+        for ($i=0; $i < count($paginas); $i++) { 
+            $deleteImagePath = str_replace(url('http://127.0.0.1:8000/storage/'), '', $paginas[$i]->url);
+            $paginas[$i]->url = $deleteImagePath ;
         }
-    
-        $html .= '</body></html>';
-    
-        // Load HTML into Dompdf
-        $dompdf->loadHtml($html);
-    
-        // Set paper size and orientation
-        $dompdf->setPaper('A4', 'portrait');
-    
-        // Render the PDF
-        $dompdf->render();
-    
-        // Output the PDF as a download
-        $dompdf->stream('paginas.pdf');
+
+        $pdf = Pdf::loadView('cuento.descargar', compact('cuento','paginas','usuario'));
+        return $pdf->download('invoice.pdf');
 
         //return view('cuento.show', compact('cuento','paginas'));
     }
